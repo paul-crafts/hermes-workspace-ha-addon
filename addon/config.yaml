@@ -1,0 +1,24 @@
+name: "Hermes Workspace"
+version: "1.0.0"
+slug: "hermes_workspace"
+description: "Hermes Workspace and Agent for Home Assistant"
+arch:
+  - aarch64
+  - amd64
+  - armv7
+  - armhf
+init: false
+ingress: true
+ingress_port: 3000
+panel_icon: "mdi:robot-outline"
+panel_title: "Hermes Workspace"
+map:
+  - addon_config:rw
+options:
+  llm_provider: "openai"
+  api_key: ""
+schema:
+  llm_provider: "match(openai|anthropic|openrouter|google|ollama)"
+  api_key: "str?"
+ports:
+  8642/tcp: 8642
