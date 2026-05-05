@@ -1,4 +1,10 @@
-# Switching back to Debian for full compatibility with web browsing (Playwright/Chromium)
+# 1. Source: Official Workspace
+FROM ghcr.io/outsourc-e/hermes-workspace:latest AS workspace
+
+# 2. Source: Official Agent
+FROM nousresearch/hermes-agent:latest AS agent
+
+# 3. Final Image
 FROM ghcr.io/home-assistant/aarch64-base-debian:bookworm
 
 # Set environment
@@ -6,8 +12,10 @@ ENV LANG C.UTF-8
 ENV HOME="/config"
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 ENV CHROME_BIN=/usr/bin/chromium
+ENV PYTHONUNBUFFERED=1
 
-# Install system dependencies + Browser support
+# Install runtime dependencies + Browser support
+# We only install the essentials here, skipping build-essential to save space
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nodejs \
     npm \
@@ -32,25 +40,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpango-1.0-0 \
     libcairo2 \
     libasound2 \
+    jq \
     && rm -rf /var/lib/apt/lists/* \
-    && echo "System dependencies and Browser tools installed."
+    && echo "Runtime dependencies and Browser tools installed."
 
-# Set up Python environment
-RUN python3 -m venv /opt/hermes-venv
-ENV PATH="/opt/hermes-venv/bin:$PATH"
-
-# Install hermes-agent (verbose)
-RUN pip3 install -v --no-cache-dir git+https://github.com/NousResearch/hermes-agent.git \
-    && echo "Hermes Agent installed."
-
-# Copy workspace directly from the pre-built image
+# Copy pre-built workspace from workspace source
 WORKDIR /app
-COPY --from=ghcr.io/outsourc-e/hermes-workspace:latest /app /app
-RUN echo "Workspace assets copied."
+COPY --from=workspace /app /app
+
+# Copy the entire hermes-agent installation from agent source
+# This skips the slow pip install / compilation phase
+COPY --from=agent /opt/hermes /opt/hermes
+COPY --from=agent /usr/local/bin/uv /usr/local/bin/uv
+
+# Link the agent so it's globally available
+ENV PATH="/opt/hermes/.venv/bin:$PATH"
 
 # Add startup script
 COPY run.sh /run.sh
 RUN chmod a+x /run.sh
 
-# Use standard HA command pattern
 CMD [ "/run.sh" ]

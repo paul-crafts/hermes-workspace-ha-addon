@@ -1,8 +1,11 @@
 #!/usr/bin/env bashio
 
-# Set HOME to /config for persistence (mapped to addon_configs)
+# Set environment
 export HOME="/config"
+export HERMES_HOME="/config"
+export INSTALL_DIR="/opt/hermes"
 export NODE_ENV="production"
+export PYTHONUNBUFFERED=1
 
 # Read LLM configuration from Add-on options
 if bashio::config.has_value 'openai_api_key'; then
@@ -30,21 +33,29 @@ if bashio::config.has_value 'mistral_api_key'; then
     bashio::log.info "Configured Mistral API key"
 fi
 
+# Bootstrap Hermes directory structure in /config
+mkdir -p "$HERMES_HOME"/{cron,sessions,logs,hooks,memories,skills,skins,plans,workspace,home}
+
+# Bootstrap config files if they don't exist
+if [ ! -f "$HERMES_HOME/.env" ]; then
+    cp "$INSTALL_DIR/.env.example" "$HERMES_HOME/.env" || true
+fi
+if [ ! -f "$HERMES_HOME/config.yaml" ]; then
+    cp "$INSTALL_DIR/cli-config.yaml.example" "$HERMES_HOME/config.yaml" || true
+fi
+
 # Agent configuration
 export API_SERVER_HOST="0.0.0.0"
 export API_SERVER_ENABLED="true"
 
-# Ensure the .hermes config directory exists
-mkdir -p "$HOME/.hermes"
-
 # Workspace configuration
-# Connect the workspace to the local agent running in the same container
 export HERMES_API_URL="http://127.0.0.1:8642"
 export PORT="3000"
-
-# Trust proxy so ingress works correctly
 export TRUST_PROXY="1"
 export COOKIE_SECURE="0"
+
+# Use the pre-installed venv
+source "${INSTALL_DIR}/.venv/bin/activate"
 
 bashio::log.info "Starting Hermes Agent Gateway..."
 # Start the agent in the background
