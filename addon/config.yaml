@@ -1,5 +1,5 @@
 name: "Hermes Workspace"
-version: "1.0.0"
+version: "1.0.1"
 slug: "hermes_workspace"
 description: "Hermes Workspace and Agent for Home Assistant"
 arch:
@@ -22,3 +22,4 @@ schema:
   api_key: "str?"
 ports:
   8642/tcp: 8642
+  3000/tcp: 3000
