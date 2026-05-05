@@ -1,5 +1,5 @@
 name: "Hermes Workspace"
-version: "1.4.0"
+version: "1.5.0"
 slug: "hermes_workspace"
 description: "AI agent command center for Home Assistant"
 url: "https://github.com/paul-crafts/hermes-workspace-ha-addon"
