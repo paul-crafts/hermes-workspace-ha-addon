@@ -80,7 +80,7 @@ fi
 # Always sync the core code into the persistent venv to ensure fixes are applied
 # while preserving any other packages the user or agent has installed.
 bashio::log.info "Syncing Hermes environment to persistent storage..."
-uv pip install --quiet --python "$PERSISTENT_ENV/venv/bin/python" -e "$INSTALL_DIR[all]"
+uv pip install --quiet --python "$PERSISTENT_ENV/venv/bin/python" -e "${INSTALL_DIR}[all]"
 
 # Use the persistent venv
 source "$PERSISTENT_ENV/venv/bin/activate"
@@ -88,6 +88,10 @@ source "$PERSISTENT_ENV/venv/bin/activate"
 bashio::log.info "Starting Hermes Agent Gateway..."
 # Start the agent in the background
 (cd "${INSTALL_DIR}" && hermes gateway run) > /proc/1/fd/1 2>&1 &
+
+bashio::log.info "Starting Hermes Dashboard..."
+# Start the dashboard in the background (required for extended APIs like Skills, Sessions, etc.)
+(cd "${INSTALL_DIR}" && hermes dashboard) > /proc/1/fd/1 2>&1 &
 
 bashio::log.info "Starting Hermes Workspace..."
 cd /app
