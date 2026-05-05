@@ -13,6 +13,7 @@ ENV INSTALL_DIR="/opt/hermes"
 ENV PLAYWRIGHT_BROWSERS_PATH="/opt/hermes/.playwright"
 ENV CHROME_BIN="/opt/hermes/.playwright/chromium-*/chrome-linux/chrome"
 ENV PATH="/opt/hermes/.venv/bin:${PATH}"
+ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0
 
 # Install only the system libraries needed for the browser (much faster than full chromium)
 RUN apt-get update && apt-get install -y --no-install-recommends \
