@@ -1,17 +1,15 @@
 name: "Hermes Workspace"
-version: "1.0.3"
+version: "1.0.4"
 slug: "hermes_workspace"
-description: "Hermes Workspace and Agent for Home Assistant"
+description: "AI agent command center for Home Assistant"
+url: "https://github.com/paul-crafts/hermes-workspace-ha-addon"
 arch:
   - aarch64
   - amd64
-  - armv7
-  - armhf
-init: false
 ingress: true
 ingress_port: 3000
 panel_icon: "mdi:robot-outline"
-panel_title: "Hermes Workspace"
+panel_title: "Hermes"
 map:
   - addon_config:rw
 options:
@@ -22,12 +20,11 @@ options:
   groq_api_key: ""
   mistral_api_key: ""
 schema:
-  openai_api_key: "str?"
-  anthropic_api_key: "str?"
-  google_api_key: "str?"
-  openrouter_api_key: "str?"
-  groq_api_key: "str?"
-  mistral_api_key: "str?"
+  openai_api_key: "password?"
+  anthropic_api_key: "password?"
+  google_api_key: "password?"
+  openrouter_api_key: "password?"
+  groq_api_key: "password?"
+  mistral_api_key: "password?"
 ports:
   8642/tcp: 8642
-  3000/tcp: 3000
