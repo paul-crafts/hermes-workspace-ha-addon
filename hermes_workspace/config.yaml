@@ -1,11 +1,13 @@
 name: "Hermes Workspace"
-version: "1.0.4"
+version: "1.0.5"
 slug: "hermes_workspace"
 description: "AI agent command center for Home Assistant"
 url: "https://github.com/paul-crafts/hermes-workspace-ha-addon"
 arch:
   - aarch64
   - amd64
+boot: auto
+startup: application
 ingress: true
 ingress_port: 3000
 panel_icon: "mdi:robot-outline"
