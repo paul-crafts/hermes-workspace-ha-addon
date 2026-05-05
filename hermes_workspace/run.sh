@@ -60,7 +60,7 @@ source "${INSTALL_DIR}/.venv/bin/activate"
 
 bashio::log.info "Starting Hermes Agent Gateway..."
 # Start the agent in the background
-hermes gateway run > /proc/1/fd/1 2>&1 &
+(cd "${INSTALL_DIR}" && uv run hermes gateway run) > /proc/1/fd/1 2>&1 &
 
 bashio::log.info "Starting Hermes Workspace..."
 cd /app

@@ -51,6 +51,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=agent /opt/hermes /opt/hermes
 COPY --from=agent /usr/local/bin/uv /usr/local/bin/uv
 
+# Re-create the virtual environment to match the system Python version (3.11)
+# This ensures that the hermes_cli module and all dependencies are correctly found.
+RUN cd /opt/hermes && \
+    rm -rf .venv && \
+    uv venv && \
+    uv pip install --no-cache-dir -e ".[all]"
+
 # Copy pre-built workspace from workspace source
 WORKDIR /app
 COPY --from=workspace /app /app
