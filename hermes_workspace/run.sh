@@ -6,6 +6,7 @@ export HERMES_HOME="/config"
 export INSTALL_DIR="/opt/hermes"
 export NODE_ENV="production"
 export PYTHONUNBUFFERED=1
+export PLAYWRIGHT_BROWSERS_PATH="/opt/hermes/.playwright"
 
 # Read LLM configuration from Add-on options
 if bashio::config.has_value 'openai_api_key'; then
