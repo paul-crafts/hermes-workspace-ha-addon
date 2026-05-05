@@ -5,20 +5,29 @@ export HOME="/config"
 export NODE_ENV="production"
 
 # Read LLM configuration from Add-on options
-if bashio::config.has_value 'llm_provider' && bashio::config.has_value 'api_key'; then
-    PROVIDER=$(bashio::config 'llm_provider')
-    API_KEY=$(bashio::config 'api_key')
-
-    if [ "$PROVIDER" = "openai" ]; then
-        export OPENAI_API_KEY="$API_KEY"
-    elif [ "$PROVIDER" = "anthropic" ]; then
-        export ANTHROPIC_API_KEY="$API_KEY"
-    elif [ "$PROVIDER" = "openrouter" ]; then
-        export OPENROUTER_API_KEY="$API_KEY"
-    elif [ "$PROVIDER" = "google" ]; then
-        export GOOGLE_API_KEY="$API_KEY"
-    fi
-    bashio::log.info "Configured API key for provider: $PROVIDER"
+if bashio::config.has_value 'openai_api_key'; then
+    export OPENAI_API_KEY=$(bashio::config 'openai_api_key')
+    bashio::log.info "Configured OpenAI API key"
+fi
+if bashio::config.has_value 'anthropic_api_key'; then
+    export ANTHROPIC_API_KEY=$(bashio::config 'anthropic_api_key')
+    bashio::log.info "Configured Anthropic API key"
+fi
+if bashio::config.has_value 'google_api_key'; then
+    export GOOGLE_API_KEY=$(bashio::config 'google_api_key')
+    bashio::log.info "Configured Google API key"
+fi
+if bashio::config.has_value 'openrouter_api_key'; then
+    export OPENROUTER_API_KEY=$(bashio::config 'openrouter_api_key')
+    bashio::log.info "Configured OpenRouter API key"
+fi
+if bashio::config.has_value 'groq_api_key'; then
+    export GROQ_API_KEY=$(bashio::config 'groq_api_key')
+    bashio::log.info "Configured Groq API key"
+fi
+if bashio::config.has_value 'mistral_api_key'; then
+    export MISTRAL_API_KEY=$(bashio::config 'mistral_api_key')
+    bashio::log.info "Configured Mistral API key"
 fi
 
 # Agent configuration
