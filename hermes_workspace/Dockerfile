@@ -3,7 +3,8 @@ FROM nousresearch/hermes-agent:latest AS agent
 FROM ghcr.io/outsourc-e/hermes-workspace:latest AS workspace
 
 # 2. Final Image (Back to HA Base)
-FROM ghcr.io/home-assistant/aarch64-base-debian:bookworm
+ARG BUILD_FROM
+FROM $BUILD_FROM
 
 # Set environment
 ENV LANG C.UTF-8
