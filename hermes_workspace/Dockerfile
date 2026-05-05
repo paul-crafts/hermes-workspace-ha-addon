@@ -15,6 +15,9 @@ ENV INSTALL_DIR="/opt/hermes"
 ENV PLAYWRIGHT_BROWSERS_PATH="/opt/hermes/.playwright"
 ENV CHROME_BIN="/opt/hermes/.playwright/chromium-*/chrome-linux/chrome"
 ENV PATH="/opt/hermes/.venv/bin:${PATH}"
+ENV __BASHIO_LIB_DIR=/usr/lib/bashio
+ENV S6_KEEP_ENV=1
+ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0
 
 
 # Install only the system libraries needed for the browser (much faster than full chromium)
@@ -53,7 +56,8 @@ WORKDIR /app
 COPY --from=workspace /app /app
 
 # Add startup script
-# Add startup script as a supervised service
-RUN mkdir -p /etc/services.d/hermes
-COPY run.sh /etc/services.d/hermes/run
-RUN chmod a+x /etc/services.d/hermes/run
+# Add startup script
+COPY run.sh /run.sh
+RUN chmod a+x /run.sh
+
+CMD [ "/run.sh" ]
