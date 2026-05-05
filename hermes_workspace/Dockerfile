@@ -21,10 +21,14 @@ ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0
 ENV UV_LINK_MODE=copy
 
 
-# Install only the system libraries needed for the browser (much faster than full chromium)
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    gnupg \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y --no-install-recommends \
     nodejs \
-    npm \
     python3 \
     python3-pip \
     python3-venv \
