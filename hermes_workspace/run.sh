@@ -56,6 +56,7 @@ export HERMES_API_URL="http://127.0.0.1:8642"
 export HERMES_API_KEY="hermes-workspace-ha-addon-secret"
 export PORT="3000"
 export HOST="0.0.0.0"
+export HERMES_ALLOW_INSECURE_REMOTE="1"
 export TRUST_PROXY="1"
 export COOKIE_SECURE="0"
 
