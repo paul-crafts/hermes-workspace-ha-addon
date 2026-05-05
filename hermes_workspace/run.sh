@@ -52,4 +52,4 @@ hermes gateway run > /proc/1/fd/1 2>&1 &
 
 bashio::log.info "Starting Hermes Workspace..."
 cd /app
-exec node --max-old-space-size=256 server-entry.js
+exec node --max-old-space-size=192 server-entry.js

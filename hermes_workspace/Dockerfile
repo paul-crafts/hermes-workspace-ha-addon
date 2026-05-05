@@ -1,11 +1,10 @@
-# Hardcoding the aarch64 base image for Home Assistant Yellow (CM4) to ensure success
 FROM ghcr.io/home-assistant/aarch64-base-debian:bookworm
 
 # Set environment
 ENV LANG C.UTF-8
 ENV HOME="/config"
 
-# Install system dependencies
+# Install system dependencies (Step 1)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nodejs \
     npm \
@@ -14,18 +13,25 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-venv \
     curl \
     git \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && echo "System dependencies installed successfully."
 
-# Install hermes-agent via pip inside a venv
-RUN python3 -m venv /opt/hermes-venv
+# Set up Python environment (Step 2)
+RUN python3 -m venv /opt/hermes-venv \
+    && echo "Python virtual environment created."
 ENV PATH="/opt/hermes-venv/bin:$PATH"
-RUN pip3 install --no-cache-dir git+https://github.com/NousResearch/hermes-agent.git
 
-# Copy workspace directly from the pre-built image
+# Install hermes-agent with verbose output (Step 3)
+# This is usually the slowest part of the build
+RUN pip3 install -v --no-cache-dir git+https://github.com/NousResearch/hermes-agent.git \
+    && echo "Hermes Agent installed successfully."
+
+# Copy workspace (Step 4)
 WORKDIR /app
 COPY --from=ghcr.io/outsourc-e/hermes-workspace:latest /app /app
+RUN echo "Hermes Workspace assets copied."
 
-# Add startup script
+# Finalize (Step 5)
 COPY run.sh /run.sh
 RUN chmod a+x /run.sh
 
