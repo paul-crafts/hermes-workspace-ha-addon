@@ -1,5 +1,5 @@
 name: "Hermes Workspace"
-version: "1.0.2"
+version: "1.0.3"
 slug: "hermes_workspace"
 description: "Hermes Workspace and Agent for Home Assistant"
 arch:
