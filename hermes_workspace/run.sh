@@ -48,9 +48,12 @@ fi
 # Agent configuration
 export API_SERVER_HOST="0.0.0.0"
 export API_SERVER_ENABLED="true"
+export API_SERVER_KEY="hermes-workspace-ha-addon-secret"
+export GATEWAY_ALLOW_ALL_USERS="true"
 
 # Workspace configuration
 export HERMES_API_URL="http://127.0.0.1:8642"
+export HERMES_API_KEY="hermes-workspace-ha-addon-secret"
 export PORT="3000"
 export TRUST_PROXY="1"
 export COOKIE_SECURE="0"
