@@ -18,6 +18,7 @@ ENV PATH="/opt/hermes/.venv/bin:${PATH}"
 ENV __BASHIO_LIB_DIR=/usr/lib/bashio
 ENV S6_KEEP_ENV=1
 ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0
+ENV UV_LINK_MODE=copy
 
 
 # Install only the system libraries needed for the browser (much faster than full chromium)

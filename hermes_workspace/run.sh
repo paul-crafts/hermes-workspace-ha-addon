@@ -55,6 +55,7 @@ export GATEWAY_ALLOW_ALL_USERS="true"
 export HERMES_API_URL="http://127.0.0.1:8642"
 export HERMES_API_KEY="hermes-workspace-ha-addon-secret"
 export PORT="3000"
+export HOST="0.0.0.0"
 export TRUST_PROXY="1"
 export COOKIE_SECURE="0"
 
