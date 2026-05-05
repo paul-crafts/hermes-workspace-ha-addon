@@ -1,8 +1,4 @@
-# 1. Get the pre-built workspace
-FROM ghcr.io/outsourc-e/hermes-workspace:latest AS workspace
-
-# 2. Final image
-ARG BUILD_FROM=ghcr.io/home-assistant/aarch64-base-debian:bookworm
+ARG BUILD_FROM
 FROM $BUILD_FROM
 
 # Set environment
@@ -21,14 +17,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install hermes-agent via pip
-# We use a venv to stay clean on Debian
 RUN python3 -m venv /opt/hermes-venv
 ENV PATH="/opt/hermes-venv/bin:$PATH"
 RUN pip3 install --no-cache-dir git+https://github.com/NousResearch/hermes-agent.git
 
-# Copy workspace from build stage
+# Copy workspace directly from the pre-built image
 WORKDIR /app
-COPY --from=workspace /app /app
+COPY --from=ghcr.io/outsourc-e/hermes-workspace:latest /app /app
 
 # Add startup script
 COPY run.sh /run.sh
