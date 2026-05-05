@@ -60,12 +60,34 @@ export HERMES_ALLOW_INSECURE_REMOTE="1"
 export TRUST_PROXY="1"
 export COOKIE_SECURE="0"
 
-# Use the pre-installed venv
-source "${INSTALL_DIR}/.venv/bin/activate"
+# Persistent Environment Setup
+# This ensures that any packages installed via 'pip' or 'uv' at runtime
+# survive add-on updates.
+PERSISTENT_ENV="/config/hermes_env"
+mkdir -p "$PERSISTENT_ENV/bin"
+export PATH="$PERSISTENT_ENV/bin:$PATH"
+
+# Setup persistent npm global directory
+mkdir -p "$PERSISTENT_ENV/npm"
+export NPM_CONFIG_PREFIX="$PERSISTENT_ENV/npm"
+export PATH="$PERSISTENT_ENV/npm/bin:$PATH"
+
+if [ ! -d "$PERSISTENT_ENV/venv" ]; then
+    bashio::log.info "Initializing persistent virtual environment in /config/hermes_env/venv..."
+    uv venv "$PERSISTENT_ENV/venv"
+fi
+
+# Always sync the core code into the persistent venv to ensure fixes are applied
+# while preserving any other packages the user or agent has installed.
+bashio::log.info "Syncing Hermes environment to persistent storage..."
+uv pip install --quiet --python "$PERSISTENT_ENV/venv/bin/python" -e "$INSTALL_DIR[all]"
+
+# Use the persistent venv
+source "$PERSISTENT_ENV/venv/bin/activate"
 
 bashio::log.info "Starting Hermes Agent Gateway..."
 # Start the agent in the background
-(cd "${INSTALL_DIR}" && uv run hermes gateway run) > /proc/1/fd/1 2>&1 &
+(cd "${INSTALL_DIR}" && hermes gateway run) > /proc/1/fd/1 2>&1 &
 
 bashio::log.info "Starting Hermes Workspace..."
 cd /app
