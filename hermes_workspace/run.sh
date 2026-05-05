@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv bashio
+#!/usr/bin/env bashio
 
 # Set HOME to /config for persistence (mapped to addon_configs)
 export HOME="/config"
