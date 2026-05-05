@@ -1,5 +1,5 @@
-ARG BUILD_FROM
-FROM $BUILD_FROM
+# Hardcoding the aarch64 base image for Home Assistant Yellow (CM4) to ensure success
+FROM ghcr.io/home-assistant/aarch64-base-debian:bookworm
 
 # Set environment
 ENV LANG C.UTF-8
@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Install hermes-agent via pip
+# Install hermes-agent via pip inside a venv
 RUN python3 -m venv /opt/hermes-venv
 ENV PATH="/opt/hermes-venv/bin:$PATH"
 RUN pip3 install --no-cache-dir git+https://github.com/NousResearch/hermes-agent.git
